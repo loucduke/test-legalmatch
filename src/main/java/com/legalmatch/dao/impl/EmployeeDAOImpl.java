@@ -64,7 +64,7 @@ public class EmployeeDAOImpl extends AbstractDAO<Employee> implements EmployeeDa
 
     @Override
     public Employee save(Employee emp) {
-
+        
         if(emp != null){
             for(ContactInfo c : emp.getContacts()){
                 System.out.println("saving parent emp");
@@ -76,7 +76,7 @@ public class EmployeeDAOImpl extends AbstractDAO<Employee> implements EmployeeDa
             
         }    
             
-        return super.save(emp); //To change body of generated methods, choose Tools | Templates.
+        return super.save(emp); 
     }
     
     
