@@ -6,20 +6,13 @@
 package com.legalmatch.rest.services;
 
 import com.legalmatch.dao.EmployeeDao;
-import com.legalmatch.dao.IDAO;
-import com.legalmatch.models.AddressInfo;
-import com.legalmatch.models.ContactInfo;
 import com.legalmatch.models.Employee;
 import com.legalmatch.models.search.EmployeeSearch;
 import com.opensymphony.xwork2.ModelDriven;
-import java.util.List;
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -30,7 +23,6 @@ public class EmployeeController implements ModelDriven<Object>{
 
     @Autowired
     private EmployeeDao repository;
-    
 
     private Long id;
     
@@ -91,10 +83,11 @@ public class EmployeeController implements ModelDriven<Object>{
         return empSearch;
     }
 
+    // state setter getters
+
     public void setEmpSearch(EmployeeSearch empSearch) {
         this.empSearch = empSearch;
     }
-
     
     public Employee getEmp() {
         return emp;

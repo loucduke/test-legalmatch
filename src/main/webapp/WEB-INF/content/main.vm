@@ -70,7 +70,7 @@
                         <a href="" ng-click="next()">[ Next ]</a>
                         <a href="" ng-click="last()">[ Last ]</a>
 
-                        <span style="float: right"><input type="text" ng-model="searchParams.text" /> <button type="button" ng-click="search()" >Search</button></span>
+                        <span style="float: right"><input type="text" ng-model="searchParams.text" placeholder="First name search"/> <button type="button" ng-click="search()" >Search</button></span>
                     </span>
 
                     </div>

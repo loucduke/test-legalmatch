@@ -40,6 +40,7 @@ public class HibernateConfig {
     @Value("${jdbc.password}")
     private String password;
     
+    
     @Value("${hibernate.dialect}")
     private String hibernateDialect;
     
