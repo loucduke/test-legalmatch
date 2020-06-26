@@ -5,8 +5,9 @@
  */
 package com.legalmatch.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,8 +25,9 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "employees")
-public class Employee {
+public class Employee implements Serializable{
     
+   
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")    
@@ -52,10 +54,15 @@ public class Employee {
     @Column(name = "date_hired")
     private Date dateHired;
     
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Column(name = "gender")
+    private String gender;
+    
+    @JsonIgnoreProperties("employee")
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER ,cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<AddressInfo> addresses;
     
-    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("employee")
+    @OneToMany(mappedBy = "employee",  fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ContactInfo> contacts;
     
     public Long getId() {
@@ -136,6 +143,14 @@ public class Employee {
 
     public void setContacts(Set<ContactInfo> contacts) {
         this.contacts = contacts;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
     
     

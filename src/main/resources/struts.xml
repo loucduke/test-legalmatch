@@ -8,24 +8,63 @@
     
     <constant name="struts.mapper.class" value="org.apache.struts2.dispatcher.mapper.PrefixBasedActionMapper" />
     <constant name="struts.mapper.prefixMapping" value="/rest:rest, :struts"/>
-    <constant name="struts.actionProxyFactory" value="org.apache.struts2.factory.PrefixBasedActionProxyFactory"/>
+    <constant name="struts.actionProxyFactory" value="prefix"/>
     
-    <constant name="struts.convention.action.suffix" value="Controller"/>
+    <constant name="struts.convention.action.suffix" value="Action, Controller"/>
     <constant name="struts.convention.action.mapAllMatches" value="true"/>
-    <constant name="struts.convention.default.parent.package" value="rest-default"/>
-    <constant name="struts.convention.package.locators" value="services"/>    
+    <constant name="struts.convention.default.parent.package" value="jsonrest-default"/>
+    <constant name="struts.convention.package.locators" value="services, actions"/>    
     <constant name="struts.rest.namespace" value="/rest" />
-    
-    <package name="default" namespace="/" extends="struts-default">
-        <action name=""> 
-          <result type="redirectAction">login</result> 
-        </action>
-    </package>
+    <constant name="struts.rest.defaultExtension" value="json" />
 
-    <package name="rest" namespace="/rest" extends="rest-default">
+    <constant name="struts.rest.content.restrictToGET" value="false"/>
+    
+<!--    <package name="default" namespace="/" extends="struts-default">
         <action name=""> 
           <result type="redirectAction">login</result> 
         </action>
+    </package>-->
+
+    <package name="jsonrest-default" namespace="/rest" extends="rest-default, json-default">
+        <interceptors>
+            <interceptor-stack name="jsonStack">
+                <interceptor-ref name="json"/>
+                <interceptor-ref name="exception"/>
+                <interceptor-ref name="alias"/>
+                <interceptor-ref name="servletConfig"/>
+                <interceptor-ref name="messages">
+                    <param name="operationMode">AUTOMATIC</param>
+                </interceptor-ref>
+                <interceptor-ref name="prepare"/>
+                <interceptor-ref name="i18n"/>
+                <interceptor-ref name="chain"/>
+                <interceptor-ref name="debugging"/>
+                <interceptor-ref name="profiling"/>
+                <interceptor-ref name="actionMappingParams"/>
+                <interceptor-ref name="scopedModelDriven"/>
+                <interceptor-ref name="modelDriven">
+                    <param name="refreshModelBeforeResult">true</param>
+                </interceptor-ref>
+                <interceptor-ref name="fileUpload"/>
+                <interceptor-ref name="checkbox"/>
+                <interceptor-ref name="staticParams"/>
+                <interceptor-ref name="params"/>
+                <interceptor-ref name="conversionError"/>
+                <interceptor-ref name="validation">
+                    <param name="excludeMethods">input,back,cancel,browse,index,show,edit,editNew</param>
+                </interceptor-ref>
+                <interceptor-ref name="restWorkflow">
+                    <param name="excludeMethods">input,back,cancel,browse,index,show,edit,editNew</param>
+                </interceptor-ref>                
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="jsonStack"></default-interceptor-ref>
+        <action name=""> 
+          <result type="redirectAction">login</result> 
+        </action>
+
     </package>
+    
         
 </struts> 

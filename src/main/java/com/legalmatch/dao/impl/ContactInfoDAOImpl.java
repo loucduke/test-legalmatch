@@ -5,7 +5,6 @@
  */
 package com.legalmatch.dao.impl;
 
-import com.legalmatch.dao.ContactInfoDAO;
 import com.legalmatch.dao.IDAO;
 import com.legalmatch.models.ContactInfo;
 import org.springframework.stereotype.Repository;
@@ -14,8 +13,8 @@ import org.springframework.stereotype.Repository;
  *
  * @author loucarmendoza
  */
-@Repository
-public class ContactInfoDAOImpl extends AbstractDAO<ContactInfo> implements ContactInfoDAO{
+@Repository("contactInfo")
+public class ContactInfoDAOImpl extends AbstractDAO<ContactInfo> implements IDAO<ContactInfo>{
     public ContactInfoDAOImpl(){
         setClazz(ContactInfo.class);
     }

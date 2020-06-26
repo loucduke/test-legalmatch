@@ -44,7 +44,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
     protected void configure(final HttpSecurity sec) throws Exception {
         sec.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/").anonymous()
                 .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -52,7 +51,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
                 .loginPage("/login")
                 .loginProcessingUrl("/auth")
                 .defaultSuccessUrl("/main", true)
-                .failureUrl("/login?error=true");
+                .failureUrl("/login?error=true")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login");
                 
     }
     

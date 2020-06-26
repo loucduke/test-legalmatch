@@ -5,10 +5,16 @@
  */
 package com.legalmatch.dao;
 
-import com.legalmatch.models.auth.Role;
+import com.legalmatch.models.Employee;
+import java.util.List;
 
 /**
  *
  * @author loucarmendoza
  */
-public interface RoleDAO extends IDAO<Role>{ }
+public interface EmployeeDao extends IDAO<Employee>{
+    
+    public List<Employee> find(Integer max, Integer offset, String text);
+
+    public Integer getEmployeeCount();
+}

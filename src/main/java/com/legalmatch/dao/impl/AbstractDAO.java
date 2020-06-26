@@ -36,12 +36,14 @@ public class AbstractDAO <T> {
    }
  
    public T save(T entity) {
-      getCurrentSession().persist( entity );
+      getCurrentSession().save( entity );
+      getCurrentSession().flush();
       return entity;
    }
  
    public T update(T entity) {
-      return (T) getCurrentSession().merge( entity );
+      getCurrentSession().merge( entity );
+      return entity;
    }
    
  

@@ -1,0 +1,7 @@
+<toolbox>
+  <tool>
+    <key>link</key>
+    <scope>application</scope>
+    <class>org.apache.velocity.tools.struts.StrutsLinkTool</class>
+  </tool>
+</toolbox>

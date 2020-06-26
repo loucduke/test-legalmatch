@@ -6,17 +6,11 @@
 package com.legalmatch.actions;
 
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.convention.annotation.Action;
-import org.apache.struts2.convention.annotation.Actions;
 import org.apache.struts2.convention.annotation.Result;
-
 /**
  *
  * @author loucarmendoza
  */
-@Action(value = "login", 
-    results = {
-        @Result(name="success", location="login.vm")
-    }
-)
-public class LoginAction extends ActionSupport{}
+@Result(name="success", location="login.vm", type="velocity")
+public class LoginAction extends ActionSupport{
+}

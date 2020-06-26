@@ -10,16 +10,13 @@ import com.legalmatch.models.Employee;
 import com.opensymphony.xwork2.ModelDriven;
 import java.lang.reflect.Field;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.apache.struts2.rest.DefaultHttpHeaders;
 import org.apache.struts2.rest.HttpHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 /**
  *
  * @author loucarmendoza
  */
-@Component
 public abstract class AbstractController<T> implements ModelDriven<Object>{
     
     private List<T> list;
@@ -27,20 +24,19 @@ public abstract class AbstractController<T> implements ModelDriven<Object>{
     private String id;
     
     private T model;
-
-    @Autowired
-    private IDAO<T> modelRepository;
-    
-    
+   
     @Override
     public Object getModel() {
         return (list != null ? list : model);
     }
+    
+    @PostConstruct
+    protected abstract IDAO<T> getRepository();
 
     
     public void setId(String id) {
         if (id != null) {
-            this.model = modelRepository.findOne(Long.valueOf(id));
+            this.model = getRepository().findOne(Long.valueOf(id));
         }
         this.id = id;
     }
@@ -50,7 +46,7 @@ public abstract class AbstractController<T> implements ModelDriven<Object>{
     }
 
     public HttpHeaders index() {
-        list = modelRepository.findAll();
+        list = getRepository().findAll();
         return new DefaultHttpHeaders("index");
     }
     
@@ -60,22 +56,21 @@ public abstract class AbstractController<T> implements ModelDriven<Object>{
 
 
     public String destroy() {
-        modelRepository.deleteById(Long.valueOf(id));
+        getRepository().deleteById(Long.valueOf(id));
         return "success";
     }
 
     public HttpHeaders create() throws NoSuchFieldException, IllegalAccessException {
         
-        modelRepository.save(model);
+        getRepository().save(model);
         return new DefaultHttpHeaders("success")
             .setLocationId(getModelId(model));
     }
 
     public String update() {
-        modelRepository.update(model);
+        getRepository().update(model);
         return "success";
     }    
-    
     
     private Long getModelId(T model) throws NoSuchFieldException, IllegalAccessException {
         Class clazz = model.getClass();
@@ -83,4 +78,7 @@ public abstract class AbstractController<T> implements ModelDriven<Object>{
         
         return (Long) field.get(model);
     }
+
+
+    
 }

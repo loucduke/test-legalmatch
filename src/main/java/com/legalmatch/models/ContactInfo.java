@@ -5,7 +5,10 @@
  */
 package com.legalmatch.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,7 +24,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "contact_info")
-public class ContactInfo {
+public class ContactInfo implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +39,7 @@ public class ContactInfo {
     
     @ManyToOne
     @JoinColumn(name = "emp_id")
-    @JsonIgnore
+    @JsonIgnoreProperties("contacts")
     private Employee employee;
 
     public Long getId() {

@@ -5,7 +5,6 @@
  */
 package com.legalmatch.dao.impl;
 
-import com.legalmatch.dao.AddressInfoDAO;
 import com.legalmatch.dao.IDAO;
 import com.legalmatch.models.AddressInfo;
 import org.springframework.stereotype.Repository;
@@ -14,8 +13,8 @@ import org.springframework.stereotype.Repository;
  *
  * @author loucarmendoza
  */
-@Repository
-public class AddressInfoDAOImpl extends AbstractDAO<AddressInfo> implements AddressInfoDAO{
+@Repository("addressInfo")
+public class AddressInfoDAOImpl extends AbstractDAO<AddressInfo> implements IDAO<AddressInfo>{
     public AddressInfoDAOImpl() {
         setClazz(AddressInfo.class);
     }

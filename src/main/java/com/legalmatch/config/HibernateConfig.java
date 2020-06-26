@@ -89,6 +89,8 @@ public class HibernateConfig {
         properties.put("hibernate.dialect", hibernateDialect);
         properties.put("hibernate.show_sql", showSql);
         properties.put("hibernate.hbm2ddl.auto", hbm2Ddl);
+        properties.put("hibernate.use_sql_comments", true);
+        
         
         return properties;
     }

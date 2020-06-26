@@ -1,18 +1,211 @@
-
+#set($readOnly = !$roles.contains("ROLE_ADMIN"))
+#set($disabled = "#if($readOnly)disabled#end")
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular-resource.min.js"></script>
+        <script type="text/javascript" src="https://momentjs.com/downloads/moment.min.js"></script>
+
         <script type="text/javascript" src="js/main.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
 
-    <body ng-app="LGApp" ng-controller="EmployeeController">
-        <div>
-            <h3>Employee List</h3>
-            <p>None</p>
+    <body ng-app="LGApp" ng-controller="MainViewController">
+        <div class="container mt-2">
+            <a href="/logout" style="float: right">[Logout]</a>
+        </div>
+
+        <div class="container m-5" ng-if="!mainData.employee">
+            <div ng-controller="EmployeeListController">
+                <h3>Employee List </h3>
+
+
+                <div class="row m-4" ng-if="!employees.length">
+                    <div class="col-sm-12">
+                        <p>None</p>
+                    </div>
+                </div>
+
+                <div class="row m-4" ng-if="employees.length">
+                    <div class="col-sm-12">
+
+                    <table class="table table-striped">
+                      <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Primary Address</th>
+                                <th scope="col">Primary Contact Info</th>
+                                <th scope="col">Age</th>
+                                <th scope="col"># of Years in company</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                      </thead>
+                      <tbody ng-repeat="emp in employees">
+                        <tr>
+                            <td> {{emp.firstName}} {{emp.lastName}}</td>
+                            <td> {{ getPrimaryAddress(emp).address1 }} {{ getPrimaryAddress(emp).address2 }} </td>
+                            <td> {{ getPrimaryContact(emp).contactNumber }} </td>
+                            <td> {{ getAge(emp) }} </td>
+                            <td> {{ getYears(emp) }} </td>
+                            #if( !$readOnly )
+                                <td>
+                                  <button ng-click="openEmployee(emp)" type="button">Edit</button>
+                                  <button ng-click="delete(emp)" type="button">Delete</button>
+                                </td>
+                            #else
+                                <td>
+                                  <button ng-click="openEmployee(emp)" type="button">Open</button>
+                                </td>
+
+                            #end
+                        </tr>
+                      </tbody>
+                    </table>
+                    <span>
+                        <a href="" ng-click="first()">[ First ]</a>
+                        <a href="" ng-click="prev()">[ Prev ]</a>
+                        <a href="" ng-click="next()">[ Next ]</a>
+                        <a href="" ng-click="last()">[ Last ]</a>
+
+                        <span style="float: right"><input type="text" ng-model="searchParams.text" /> <button type="button" ng-click="search()" >Search</button></span>
+                    </span>
+
+                    </div>
+                </div>
+            #if( !$readOnly )
+                <a href="" ng-click="create()" class="mx-4">[ New ]</a>
+            #end
+
+
+            </div> ##Employee List Controller
+        </div>
+        <div class="container m-5" ng-if="mainData.employee">
+
+            <div ng-controller="EmployeeInfoController">
+                <div>
+                    <h3 style="display: inline">Employee Info</h3>
+                <div>
+
+                <span class="my-5 mx-5">
+                #if( !$readOnly )
+
+                    <a href="" ng-click="save()"> [ Save ]</a>
+                    <a href="" ng-click="delete()" ng-if="employee.id"> [ Delete ]</a>
+                #end
+                </span>
+
+                <div class="row mx-5">
+                    <div class="col-sm-6 border border-primary">
+                        <div class="row my-3"><div class="col-sm-12"><input $disabled ng-model="employee.firstName" type="text" placeholder="First Name" /></div></div>
+                        <div class="row my-3"><div class="col-sm-12"><input $disabled ng-model="employee.lastName" type="text" placeholder="Last Name" /></div></div>
+                        <div class="row my-3"><div class="col-sm-12"><input $disabled ng-model="employee.middleName" type="text" placeholder="Middle Name" /></div></div>
+
+                        <div class="row my-3"><div class="col-sm-12">Birth Date: <input $disabled ng-model="employee.birthDate" type="date" /></div></div>
+
+                        <div class="row my-3">
+                            <div class="col-sm-12">Gender: 
+                                <select $disabled ng-model="employee.gender">
+                                    <option ng-repeat="gender in genders" value="{{gender}}">{{gender}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row my-3">
+                            <div class="col-sm-12">Marital Status: 
+                                <select $disabled ng-model="employee.maritalStatus">
+                                    <option ng-repeat="status in statuses" value="{{status}}">{{status}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row my-3"><div class="col-sm-12"><input $disabled ng-model="employee.position" type="text" placeholder="Position" /></div></div>
+
+                        <div class="row my-3"><div class="col-sm-12">Date Hired: <input $disabled ng-model="employee.dateHired" type="date" /></div></div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="border border-primary my-3 p-3">
+                                    <div class="row my-3">
+                                        <div class="col-sm-8">
+                                            <span>
+                                                Contact Info
+                                                #if( !$readOnly )
+
+                                                <a href="" ng-click="addContact()">[ Add ]</a>
+                                                #end
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primary
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-3" ng-repeat="con in employee.contacts">
+                                        <div class="col-sm-8">
+                                            <input $disabled type="text" ng-model="con.contactNumber" placeholder="Number" />
+                                        </div>
+                                        <div class="col-sm-2 py-2">
+                                            <input $disabled type="radio" name="primaryContact" ng-model="con.isPrimary" ng-value="true"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                        #if( !$readOnly )
+
+                                            <a href="" ng-click="removeItem(employee.contacts, con)">[ X ]</a>
+                                        #end
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="border border-primary my-3 p-3">
+
+                                    <div class="row my-3">
+                                        <div class="col-sm-8">
+                                            <span>
+                                                Address Info
+                                                #if( !$readOnly )
+
+                                                <a href="" ng-click="addAddress()">[ Add ]</a>
+                                                #end
+                                            </span>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            Primary
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-3" ng-repeat="add in employee.addresses">
+                                        <div class="col-sm-8">
+                                            <input $disabled type="text" ng-model="add.address1" placeholder="Address 1" />
+                                            <input $disabled type="text" ng-model="add.address2" placeholder="Address 2" />
+                                        </div>
+                                        <div class="col-sm-2 py-2">
+                                            <input $disabled type="radio" name="primaryAddress" ng-model="add.isPrimary" ng-value="true"/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                        #if( !$readOnly )
+
+                                            <a href="" ng-click="removeItem(employee.addresses, add)">[ X ]</a>
+                                        #end
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <a  class="my-5 " href="" ng-click="returnToList()">[Back to List]</a>
+
+                </div>
+
         </div>
     </body>
 </html>
